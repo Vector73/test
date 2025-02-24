@@ -121,7 +121,7 @@ if __name__ == "__main__":
     with open("main.py") as file:
         lines = file.readlines()
     with open("main.py", "w") as file:
-        file.write(lines + "new")
+        file.write(" ".join(lines) + "new")
 
     commit_message = f"api: Increment API feature level."
 
