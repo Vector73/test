@@ -3,7 +3,8 @@ name: Merge API changelogs
 on:
   push:
     branches: [main]
-    tags: ["*"]
+    paths:
+      - "testing/**"
   workflow_dispatch:
 
 permissions:                    # Global permissions configuration starts here
