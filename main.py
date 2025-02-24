@@ -1,2 +1,2 @@
 import osnew
-import subsystem
+ import subsystemnew
