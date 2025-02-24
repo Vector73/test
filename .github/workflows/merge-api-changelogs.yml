@@ -21,6 +21,11 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Add execute permissions to merge-api-changelogs
         run: chmod +x ./merge-api-changelogs
 
@@ -28,7 +33,4 @@ jobs:
         run: ./merge-api-changelogs
 
       - name: Push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git push origin HEAD:main
+        run: git push origin HEAD:main
