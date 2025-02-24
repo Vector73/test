@@ -6,6 +6,10 @@ on:
     tags: ["*"]
   workflow_dispatch:
 
+permissions:                    # Global permissions configuration starts here
+  contents: write                # 'read' access to repository contents
+  pull-requests: write
+
 jobs:
   merge-api-changelogs:
     runs-on: ubuntu-latest
