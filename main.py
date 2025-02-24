@@ -1,3 +1,3 @@
 import osnew
- import subsystemnewnew
- import pygamenew
+  import subsystemnewnew
+  import pygamenewnew
