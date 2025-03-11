@@ -30,17 +30,18 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run merge-api-changelogs
-        run: ./merge-api-changelogs
-
       - name: Create a new branch
         run: |
           BRANCH_NAME="update-changelog-$(date +%s)"
           git checkout -b $BRANCH_NAME
-          git add .
-          git commit -m "Update API changelog"
-          git push origin $BRANCH_NAME
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Run merge-api-changelogs
+        run: ./merge-api-changelogs
+
+      - name: Push changes (created by merge-api-changelogs)
+        run: |
+          git push origin $BRANCH_NAME
 
       - name: Authenticate GitHub CLI
         env:
