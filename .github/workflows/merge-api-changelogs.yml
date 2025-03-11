@@ -3,8 +3,6 @@ name: Merge API changelogs
 on:
   push:
     branches: [main]
-    paths:
-      - "testing/**"
   workflow_dispatch:
 
 permissions:
@@ -43,17 +41,15 @@ jobs:
         run: |
           git push origin $BRANCH_NAME
 
-      - name: Authenticate GitHub CLI
+      - name: Create Pull Request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo $GH_TOKEN | gh auth login --with-token
-
-      - name: Create Pull Request
         run: |
           gh pr create --title "Update API changelog" --body "This PR updates the API changelog." --base main --head $BRANCH_NAME
 
       - name: Auto-merge PR (Optional)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=$(gh pr list --state open --head $BRANCH_NAME --json number --jq '.[0].number')
           gh pr merge $PR_NUMBER --merge
