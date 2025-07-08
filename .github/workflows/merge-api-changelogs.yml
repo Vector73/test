@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  merge-api-changelogs:
+  check-feature-level-updated:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,29 +20,25 @@ jobs:
           python-version: "3.x"
 
       - name: Add required permissions
-        run: chmod +x ./merge-api-changelogs
+        run: chmod +x ./tools/check-feature-level-updated
 
-      - name: Run merge-api-changelogs
-        id: run_merge
-        run: |
-          set +e
-          ./merge-api-changelogs
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
-          set -e
+      - name: Run tools/check-feature-level-updated
+        id: run_check
+        run: ./check-feature-level-updated >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
+        if: ${{ steps.run_check.outputs.fail == 'true' }}
         uses: zulip/github-actions-zulip/send-message@v1
         with:
           api-key: "jmyTglDWKl8BCWapOt9FXfx41La6yXrp"
           email: "bot-bot@xyzkeshi.zulipchat.com"
           organization-url: "https://xyzkeshi.zulipchat.com/"
           to: "core team"
-          topic: "signups"
+          topic: ${{ steps.run_check.outputs.topic }}
           type: "stream"
-          content: "Failed"
+          content: ${{ steps.run_check.outputs.content }}
 
       - name: Fail job if changelog merge failed
-        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
+        if: ${{ steps.run_check.outputs.fail == 'true' }}
         run: exit 1
 
