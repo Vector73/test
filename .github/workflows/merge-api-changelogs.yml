@@ -3,10 +3,6 @@ name: Merge API changelogs
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   merge-api-changelogs:
@@ -23,33 +19,25 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Create a new branch
-        run: |
-          BRANCH_NAME="update-changelog-$(date +%s)"
-          git checkout -b $BRANCH_NAME
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
       - name: Run merge-api-changelogs
-        run: ./merge-api-changelogs
-
-      - name: Push changes (created by merge-api-changelogs)
+        id: run_merge
         run: |
-          git push origin $BRANCH_NAME
+          ./merge-api-changelogs
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr create --title "Update API changelog" --body "This PR updates the API changelog." --base main --head $BRANCH_NAME
+      - name: Fail job if changelog merge failed
+        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
+        run: exit 1
 
-      - name: Auto-merge PR (Optional)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_NUMBER=$(gh pr list --state open --head $BRANCH_NAME --json number --jq '.[0].number')
-          gh pr merge $PR_NUMBER --merge
+      - name: Report status to CZO
+        if: ${{ steps.run_merge.outputs.exit_code != '0' && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
+        uses: zulip/github-actions-zulip/send-message@v1
+        with:
+          api-key: "jmyTglDWKl8BCWapOt9FXfx41La6yXrp"
+          email: "bot-bot@xyzkeshi.zulipchat.com"
+          organization-url: "https://xyzkeshi.zulipchat.com/"
+          to: "core team"
+          topic: "general chat"
+          type: "stream"
+          content: "Failed"
+
