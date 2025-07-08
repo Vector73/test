@@ -31,7 +31,7 @@ jobs:
           set -e
 
       - name: Report status to CZO
-        if: ${{ steps.run_merge.outputs.exit_code != '0' && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
+        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
         uses: zulip/github-actions-zulip/send-message@v1
         with:
           api-key: "jmyTglDWKl8BCWapOt9FXfx41La6yXrp"
