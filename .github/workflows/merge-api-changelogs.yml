@@ -20,7 +20,7 @@ jobs:
           python-version: "3.x"
 
       - name: Add required permissions
-        run: chmod +x ./tools/check-feature-level-updated
+        run: chmod +x ./check-feature-level-updated
 
       - name: Run tools/check-feature-level-updated
         id: run_check
