@@ -22,5 +22,6 @@ if __name__ == "__main__":
             content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has failed: Feature level not replaced in main.py"
             fail = "true"
             print(f"fail={fail}\ntopic={topic}\ncontent={content}")
+            sys.exit(0)
 
     print("fail=false")
