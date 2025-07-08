@@ -27,7 +27,7 @@ jobs:
         run: ./check-feature-level-updated >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        # if: ${{ steps.run_check.outputs.fail == 'true' }}
+        if: ${{ steps.run_check.outputs.fail == 'false' }}
         uses: zulip/github-actions-zulip/send-message@v1
         with:
           api-key: "jmyTglDWKl8BCWapOt9FXfx41La6yXrp"

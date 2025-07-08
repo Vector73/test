@@ -20,6 +20,7 @@ if __name__ == "__main__":
     with open("main.py") as file:
         if "os" in file.read():
             content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has failed: Feature level not replaced in main.py"
-            print(f"fail=true\ntopic={topic}\ncontent={content}")
+            fail = "true"
+            print(f"fail={fail}\ntopic={topic}\ncontent={content}")
 
     print("fail=false")
