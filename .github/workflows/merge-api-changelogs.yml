@@ -30,10 +30,6 @@ jobs:
           echo "exit_code=$?" >> $GITHUB_OUTPUT
           set -e
 
-      - name: Fail job if changelog merge failed
-        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
-        run: exit 1
-
       - name: Report status to CZO
         if: ${{ steps.run_merge.outputs.exit_code != '0' && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
         uses: zulip/github-actions-zulip/send-message@v1
@@ -45,4 +41,8 @@ jobs:
           topic: "general chat"
           type: "stream"
           content: "Failed"
+
+      - name: Fail job if changelog merge failed
+        if: ${{ steps.run_merge.outputs.exit_code != '0' }}
+        run: exit 1
 
