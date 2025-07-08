@@ -38,7 +38,7 @@ jobs:
           email: "bot-bot@xyzkeshi.zulipchat.com"
           organization-url: "https://xyzkeshi.zulipchat.com/"
           to: "core team"
-          topic: "general chat"
+          topic: "signups"
           type: "stream"
           content: "Failed"
 
