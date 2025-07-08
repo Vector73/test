@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Add required permissions
+        run: chmod +x ./merge-api-changelogs
+
       - name: Run merge-api-changelogs
         id: run_merge
         run: |
