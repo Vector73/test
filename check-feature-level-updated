@@ -42,7 +42,8 @@ if __name__ == "__main__":
     feature_level = 4
     endpoints = get_changed_api_endpoints()
     topic = f"new feature level: {feature_level}"
-    endpoints_string = "\n".join([f'- {endpoint}' for endpoint in endpoints])
+    endpoints_string = "\n".join([f'* {endpoint}' for endpoint in endpoints])
+    print(endpoints_string)
     
     content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has updated the API documentation for the following endpoints: {endpoints_string}."
     print(f"topic={topic}\ncontent={content}")
