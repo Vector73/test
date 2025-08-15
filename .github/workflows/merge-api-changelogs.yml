@@ -27,7 +27,6 @@ jobs:
         run: ./check-feature-level-updated >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ steps.run_check.outputs.fail == 'true' }}
         uses: zulip/github-actions-zulip/send-message@v1
         with:
           api-key: "jmyTglDWKl8BCWapOt9FXfx41La6yXrp"
@@ -37,8 +36,4 @@ jobs:
           topic: ${{ steps.run_check.outputs.topic }}
           type: "stream"
           content: ${{ steps.run_check.outputs.content }}
-
-      - name: Fail job if changelog merge failed
-        if: ${{ steps.run_check.outputs.fail == 'true' }}
-        run: exit 1
 

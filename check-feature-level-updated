@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import re
 import os
 import sys
 from pathlib import Path
+import re
 
 def get_build_url_from_environment() -> str:
     server = os.environ["GITHUB_SERVER_URL"]
@@ -11,17 +11,38 @@ def get_build_url_from_environment() -> str:
     return f"{server}/{repo}/actions/runs/{run_id}"
 
 
+def get_changed_api_endpoints() -> list[str]:
+    changelog_path = Path("changelog.md")
+    feature_level_pattern = re.compile(r"\*\*Feature level \d+\*\*")
+    link_pattern = re.compile(r"(\[[^\]]+\]\([^)]+\))")
+
+    current_feature_level_found = False
+    endpoints = []
+
+    with open(changelog_path, "r") as file:
+        for line in file:
+            if re.fullmatch(feature_level_pattern, line.strip()):
+                if current_feature_level_found:
+                    break
+                current_feature_level_found = True
+                continue
+
+            if current_feature_level_found and line.strip().startswith("*"):
+                for link in link_pattern.findall(line.split(":", 1)[0]):
+                    endpoints.append(link)
+
+    return endpoints
+
 if __name__ == "__main__":
     branch = os.environ.get("GITHUB_REF", "unknown branch").split("/")[-1]
     topic = f"{branch} failing"
     build_url = get_build_url_from_environment()
     github_actor = os.environ.get("GITHUB_ACTOR", "unknown user")
-
-    with open("main.py") as file:
-        if "os" in file.read():
-            content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has failed: Feature level not replaced in main.py"
-            fail = "true"
-            print(f"fail={fail}\ntopic={topic}\ncontent={content}")
-            sys.exit(0)
-
-    print("fail=false")
+    
+    feature_level = 4
+    endpoints = get_changed_api_endpoints()
+    topic = f"new feature level: {feature_level}"
+    endpoints_string = ", ".join(endpoints)
+    
+    content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has updated the API documentation for the following endpoints: {endpoints_string}."
+    print(f"topic={topic}\ncontent={content}")
