@@ -22,12 +22,6 @@ format used by the Zulip server that they are interacting with.
 
 **Feature level 420**
 
-* [`POST /mobile_push/e2ee/test_notification`](/api/e2ee-test-notify):
-  Added a new endpoint to send an end-to-end encrypted test push notification
-  to the user's selected mobile device or all of their mobile devices.
-
-**Feature level 419**
-
 * [`POST /register`](/api/register-queue): Added `simplified_presence_events`
   [client capability](/api/register-queue#parameter-client_capabilities),
   which allows clients to specify whether they support receiving the
