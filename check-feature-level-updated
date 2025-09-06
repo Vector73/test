@@ -26,7 +26,6 @@ def changelog_changed() -> bool:
         text=True,
         check=True,
     )
-    print(result.stdout)
     return "changelog.md" in result.stdout.splitlines()
 
 
