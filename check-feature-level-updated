@@ -3,12 +3,27 @@ import os
 import sys
 from pathlib import Path
 import re
+import json
 
 def get_build_url_from_environment() -> str:
     server = os.environ["GITHUB_SERVER_URL"]
     repo = os.environ["GITHUB_REPOSITORY"]
     run_id = os.environ["GITHUB_RUN_ID"]
     return f"{server}/{repo}/actions/runs/{run_id}"
+
+def changelog_changed() -> bool:
+    event_path = os.getenv("GITHUB_EVENT_PATH")
+    if not event_path:
+        return False
+
+    with open(event_path, "r") as f:
+        event = json.load(f)
+
+    for commit in event.get("commits", []):
+        files = commit.get("added", []) + commit.get("modified", []) + commit.get("removed", [])
+        if "changelog.md" in files:
+            return True
+    return False
 
 
 def get_changed_api_endpoints() -> list[str]:
@@ -39,6 +54,9 @@ if __name__ == "__main__":
     build_url = get_build_url_from_environment()
     github_actor = os.environ.get("GITHUB_ACTOR", "unknown user")
     
+    if not changelog_changed():
+        print(f"fail=true")
+    
     feature_level = 4
     endpoints = get_changed_api_endpoints()
     topic = f"new feature level: {feature_level}"
@@ -46,4 +64,4 @@ if __name__ == "__main__":
     print(endpoints_string)
     
     content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has updated the API documentation for the following endpoints: {endpoints_string}."
-    print(f"topic={topic}\ncontent={content}")
+    print(f"fail=false\ntopic={topic}\ncontent={content}")
