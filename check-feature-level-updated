@@ -14,7 +14,6 @@ def get_build_url_from_environment() -> str:
 
 def changelog_changed() -> bool:
     event_path = os.environ["GITHUB_EVENT_PATH"]
-    print("dlfjd")
     # if not event_path:
     #     return False
 
@@ -28,7 +27,7 @@ def changelog_changed() -> bool:
             text=True,
             check=True,
         )
-        print("Changed files in last commit:\n", result.stdout)
+        print(result.stdout)
         return "changelog.md" in result.stdout.splitlines()
     except Exception:
         return False
