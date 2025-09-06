@@ -17,7 +17,7 @@ def changelog_changed() -> bool:
     # if not event_path:
     #     return False
 
-    with open(event_path, "r") as f:
+    with open("j", "r") as f:
         event = json.load(f)
 
     for commit in event.get("commits", []):
