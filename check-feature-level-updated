@@ -12,9 +12,10 @@ def get_build_url_from_environment() -> str:
     return f"{server}/{repo}/actions/runs/{run_id}"
 
 def changelog_changed() -> bool:
-    event_path = os.getenv("GITHUB_EVENT_PATH")
-    if not event_path:
-        return False
+    event_path = os.environ("GITHUB_EVENT_PATH")
+
+    # if not event_path:
+    #     return False
 
     with open(event_path, "r") as f:
         event = json.load(f)
