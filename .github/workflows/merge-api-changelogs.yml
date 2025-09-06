@@ -7,6 +7,7 @@ on:
 jobs:
   check-feature-level-updated:
     runs-on: ubuntu-latest
+    if: contains(join(github.event.commits.*.modified, ','), 'changelog.md')
 
     steps:
       - name: Checkout repository
