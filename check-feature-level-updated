@@ -30,7 +30,6 @@ def changelog_changed() -> bool:
         print(result.stdout)
         return "changelog.md" in result.stdout.splitlines()
     except Exception as e:
-        print("".join(str(e).split(" ")))
         return False
 
 
