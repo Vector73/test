@@ -28,6 +28,7 @@ def changelog_changed() -> bool:
             text=True,
             check=True,
         )
+        print("Changed files in last commit:\n", result.stdout)
         return "changelog.md" in result.stdout.splitlines()
     except Exception:
         return False
