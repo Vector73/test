@@ -21,7 +21,7 @@ def changelog_changed() -> bool:
         event = json.load(f)
         
     result = subprocess.run(
-        ["git", "diff", "--name-only", event["before"], event["after"]],
+        ["git", "diff", "--name-only", "origin/main...HEAD"],
         capture_output=True,
         text=True,
         check=True,
