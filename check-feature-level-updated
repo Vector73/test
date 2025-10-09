@@ -5,7 +5,6 @@ from pathlib import Path
 import re
 import json
 import subprocess
-import requests
 
 def get_build_url_from_environment() -> str:
     server = os.environ["GITHUB_SERVER_URL"]
@@ -14,9 +13,11 @@ def get_build_url_from_environment() -> str:
     return f"{server}/{repo}/actions/runs/{run_id}"
 
 def get_pr_info():
+    from urllib.request import Request, urlopen
+
     GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
     REPO = os.environ["GITHUB_REPOSITORY"]
-    COMMIT = os.environ["GITHUB_SHA"]  # commit from push
+    COMMIT = os.environ["GITHUB_SHA"]
 
     url = f"https://api.github.com/repos/{REPO}/commits/{COMMIT}/pulls"
     headers = {
@@ -24,9 +25,10 @@ def get_pr_info():
         "Authorization": f"token {GITHUB_TOKEN}"
     }
 
-    resp = requests.get(url, headers=headers)
-    prs = resp.json()
-    return str(prs)
+    req = Request(url, headers=headers)
+    with urlopen(req) as response:
+        prs = json.load(response)
+    return prs
 
 
 def changelog_changed() -> bool:
