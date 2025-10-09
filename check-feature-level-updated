@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import json
 import subprocess
+import requests
 
 def get_build_url_from_environment() -> str:
     server = os.environ["GITHUB_SERVER_URL"]
@@ -13,7 +14,20 @@ def get_build_url_from_environment() -> str:
     return f"{server}/{repo}/actions/runs/{run_id}"
 
 def get_pr_info():
-    return os.environ["GITHUB_EVENT_NAME"]
+    GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+    REPO = os.environ["GITHUB_REPOSITORY"]
+    COMMIT = os.environ["GITHUB_SHA"]  # commit from push
+
+    url = f"https://api.github.com/repos/{REPO}/commits/{COMMIT}/pulls"
+    headers = {
+        "Accept": "application/vnd.github.groot-preview+json",
+        "Authorization": f"token {GITHUB_TOKEN}"
+    }
+
+    resp = requests.get(url, headers=headers)
+    prs = resp.json()
+    return str(prs)
+
 
 def changelog_changed() -> bool:
     return True
