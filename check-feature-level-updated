@@ -54,5 +54,5 @@ if __name__ == "__main__":
     endpoints_string = ",".join([f'{endpoint}' for endpoint in endpoints])
     print(endpoints_string)
     
-    content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has updated the API documentation for the following endpoints: {endpoints_string}."
+    content = f"[Build]({build_url}) triggered by {github_actor} on branch `{branch}` has updated the API documentation for the following endpoints:."
     print(f"fail=false\ntopic={topic}\ncontent={content}")
