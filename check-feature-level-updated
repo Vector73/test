@@ -24,7 +24,7 @@ def get_pr_changed_files(repo, pr_number, token):
         req = Request(url, headers=headers)
         with urlopen(req) as response:
             files = json.loads(response.read().decode())
-            return files
+            return [file["filename"] for file in files]
     except Exception as e:
         print(f"Error: {e}")
         return []
