@@ -29,6 +29,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check if changelog is changed
+        if: ${{ steps.run_check.outputs.fail == 'true' }}
+        run: exit 1
+
       - name: Report status to CZO
         if: steps.run_check.outputs.fail == 'false'
         uses: zulip/github-actions-zulip/send-message@v1

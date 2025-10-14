@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-# import sys
+import sys
 from pathlib import Path
 import re
 import json
@@ -31,7 +31,7 @@ def get_changed_files():
             check=True
         )
         files = [f for f in result.stdout.strip().split("\n") if f]
-        return str(files)
+        return "new" in files
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"git diff failed: {e.stderr or e}")
         
@@ -78,6 +78,9 @@ def get_changed_api_endpoints() -> list[str]:
     return endpoints
 
 if __name__ == "__main__":
+    if not get_changed_files():
+        print("fail=true")
+        sys.exit(1)
     branch = os.environ.get("GITHUB_REF", "unknown branch").split("/")[-1]
     topic = f"{branch} failing"
     build_url = get_changed_files()
