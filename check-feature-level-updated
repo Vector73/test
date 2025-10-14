@@ -19,6 +19,7 @@ def get_pr_changed_files():
             event_data = json.load(f)
 
         changed_files = set()
+        return str(event_data)
         for commit in event_data.get("commits", []):
             for file_list in ["added", "modified", "removed"]:
                 changed_files.update(commit.get(file_list, []))
