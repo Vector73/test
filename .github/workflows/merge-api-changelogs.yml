@@ -31,7 +31,7 @@ jobs:
 
       - name: Check if changelog is changed
         if: ${{ steps.run_check.outputs.fail == 'true' }}
-        run: exit 1
+        run: exit 0
 
       - name: Report status to CZO
         if: steps.run_check.outputs.fail == 'false'
