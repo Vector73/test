@@ -13,22 +13,19 @@ def get_build_url_from_environment() -> str:
     return f"{server}/{repo}/actions/runs/{run_id}"
 
 def get_pr_changed_files(repo, pr_number, token):
-    from urllib.request import Request, urlopen
-    url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/files"
-    headers = {
-        "Accept": "application/vnd.github.groot-preview+json",
-        "Authorization": f"token {token}",
-    }
-    
-    try:
-        req = Request(url, headers=headers)
-        with urlopen(req) as response:
-            files = json.loads(response.read().decode())
-            return [file["filename"] for file in files]
-    except Exception as e:
-        print(f"Error: {e}")
-        return []
+    event_path = os.environ.get("GITHUB_EVENT_PATH")
+    if event_path and os.path.exists(event_path):
+        with open(event_path, "r") as f:
+            event_data = json.load(f)
 
+        changed_files = set()
+        for commit in event_data.get("commits", []):
+            for file_list in ["added", "modified", "removed"]:
+                changed_files.update(commit.get(file_list, []))
+
+        return str(list(changed_files))
+    else:
+        return "kdjf"
 def get_pr_info():
     from urllib.request import Request, urlopen
 
