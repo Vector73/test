@@ -52,7 +52,7 @@ def get_pr_info():
     req = Request(url, headers=headers)
     with urlopen(req) as response:
         prs = json.load(response)
-    # return str(get_pr_changed_files(REPO, prs[0]["number"], GITHUB_TOKEN)) 
+    # return str(get_pr_chakskfsdsnged_files(REPO, prs[0]["number"], GITHUB_TOKEN)) 
 
 
 def get_changed_api_endpoints() -> list[str]:
