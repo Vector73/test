@@ -12,7 +12,7 @@ def get_build_url_from_environment() -> str:
     run_id = os.environ["GITHUB_RUN_ID"]
     return f"{server}/{repo}/actions/runs/{run_id}"
 
-def get_pr_changed_files(repo, pr_number, token):
+def get_pr_changed_files():
     event_path = os.environ.get("GITHUB_EVENT_PATH")
     if event_path and os.path.exists(event_path):
         with open(event_path, "r") as f:
@@ -71,7 +71,7 @@ def get_changed_api_endpoints() -> list[str]:
 if __name__ == "__main__":
     branch = os.environ.get("GITHUB_REF", "unknown branch").split("/")[-1]
     topic = f"{branch} failing"
-    build_url = get_pr_info()
+    build_url = get_pr_changed_files()
     github_actor = os.environ.get("GITHUB_ACTOR", "unknown user")
     
     feature_level = 4
