@@ -21,6 +21,15 @@ jobs:
           python-version: "3.x"
 
       - name: Add required permissions
+        run: chmod +x ./abc
+
+      - name: Run tools/abc
+        id: run_check1
+        run: ./abc testing/new.py >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add required permissions
         run: chmod +x ./check-feature-level-updated
 
       - name: Run tools/check-feature-level-updated
