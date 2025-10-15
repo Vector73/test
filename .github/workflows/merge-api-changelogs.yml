@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tools/abc
         id: run_check1
-        run: ./abc testing/new.py >> $GITHUB_OUTPUT
+        run: ./abc testing/new.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
