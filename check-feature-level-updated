@@ -77,7 +77,7 @@ def get_changed_api_endpoints() -> list[str]:
 if __name__ == "__main__":
     # if not get_changed_files():
     #     print("changelog_changed=false")
-    #     sys.exit(0)
+    #     sys.exit(0)sdfsfd
     branch = os.environ.get("GITHUB_REF", "unknown branch").split("/")[-1]
     build_url = get_changed_files()
     github_actor = os.environ.get("GITHUB_ACTOR", "unknown user")
